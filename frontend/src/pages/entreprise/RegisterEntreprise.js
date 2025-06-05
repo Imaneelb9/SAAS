@@ -14,6 +14,7 @@ const RegisterEntreprise = () => {
     motdepasse: "",
     telephone: ""
   });
+  const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -23,11 +24,25 @@ const RegisterEntreprise = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/entreprise/register-entreprise", form);
-      alert("Entreprise inscrite avec succès !");
-      navigate("/entreprise");
+      // Utilisez le bon endpoint d'inscription entreprise (à adapter selon votre backend)
+      await axios.post("http://localhost:5000/api/auth/register", {
+        nom: form.nom,
+        secteur: form.secteur,
+        adresse: form.adresse,
+        siteWeb: form.siteWeb,
+        description: form.description,
+        email: form.email,
+        motdepasse: form.motdepasse,
+        telephone: form.telephone,
+        role: "entreprise"
+      });
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+        navigate("/entreprise");
+      }, 2000);
     } catch (err) {
-      alert("Erreur lors de l'inscription");
+      alert("Erreur lors de l'inscription : " + (err.response?.data?.details || err.message));
     }
   };
 
@@ -37,6 +52,11 @@ const RegisterEntreprise = () => {
         <div className="col-md-7">
           <div className="card shadow p-4">
             <h2 className="mb-4 text-center">Inscription Entreprise</h2>
+            {success && (
+              <div className="alert alert-success text-center" style={{ fontSize: "1.2rem", borderRadius: "1rem" }}>
+                🎉 Entreprise inscrite avec succès !
+              </div>
+            )}
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <input name="nom" className="form-control" placeholder="Nom de l'entreprise" value={form.nom} onChange={handleChange} required />

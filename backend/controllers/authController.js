@@ -3,18 +3,13 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 exports.register = async (req, res) => {
-  const { nom, prenom, email, motdepasse, role, cne, filiere, telephone } = req.body;
+  const { nom, prenom, email, motdepasse, role, cne, filiere, secteur, adresse, siteWeb, description, telephone } = req.body;
   try {
-    // Vérifiez si l'email existe déjà
-    const existing = await User.findOne({ where: { email: email.toLowerCase() } });
-    if (existing) {
-      return res.status(400).json({ error: "Cet email est déjà utilisé." });
-    }
     // Toujours enregistrer l'email en minuscule pour éviter les doublons
     const hash = await bcrypt.hash(motdepasse, 10);
     const user = await User.create({
       nom,
-      prenom,
+      prenom: prenom || "",
       email: email.toLowerCase(),
       motdepasse: hash,
       role,
@@ -28,10 +23,21 @@ exports.register = async (req, res) => {
         cv: "",
         lettreMotivation: ""
       });
+    } else if (role === "entreprise") {
+      await Entreprise.create({
+        userId: user.id,
+        nom,
+        secteur: secteur || "",
+        adresse: adresse || "",
+        siteWeb: siteWeb || "",
+        description: description || ""
+      });
     }
+    // Ajoutez ce log pour vérifier l'inscription
+    const allUsers = await User.findAll();
+    console.log("Après inscription, tous les utilisateurs en base :", allUsers.map(u => ({ email: u.email, role: u.role })));
     res.status(201).json(user);
   } catch (error) {
-    // Affichez l'erreur SQL complète pour debug
     console.error("Erreur SQL lors de l'inscription :", error);
     res.status(400).json({ error: 'Erreur lors de l’inscription', details: error.message });
   }

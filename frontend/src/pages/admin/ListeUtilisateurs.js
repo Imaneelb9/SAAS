@@ -6,16 +6,19 @@ const ListeUtilisateurs = () => {
 
   useEffect(() => {
     axios
-      .get("/api/admin/utilisateurs", {
+      .get("http://localhost:5000/api/admin/utilisateurs", { // <-- URL absolue pour éviter les problèmes de proxy
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
-      .then((res) => setUsers(res.data));
+      .then((res) => setUsers(res.data))
+      .catch((err) => {
+        alert("Erreur : " + (err.response?.data?.error || err.message));
+      });
   }, []);
 
   const toggleActivation = (id, actif) => {
     axios
       .put(
-        `/api/admin/utilisateurs/${id}/activation`,
+        `http://localhost:5000/api/admin/utilisateurs/${id}/activation`, // <-- URL absolue
         { actif: !actif },
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },

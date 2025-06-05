@@ -6,10 +6,13 @@ const Statistiques = () => {
 
   useEffect(() => {
     axios
-      .get("/api/admin/statistiques", {
+      .get("http://localhost:5000/api/admin/statistiques", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
-      .then((res) => setStats(res.data));
+      .then((res) => setStats(res.data))
+      .catch((err) => {
+        alert("Erreur : " + (err.response?.data?.error || err.message));
+      });
   }, []);
 
   return (

@@ -1,7 +1,7 @@
 const { Stage } = require('../models');
 
 exports.submitStage = async (req, res) => {
-  const { titre, entreprise, duree, tuteur, description } = req.body;
+  const { titre, entreprise, duree, tuteur, description, dateDebut, dateFin } = req.body;
   try {
     await Stage.create({
       titre,
@@ -9,8 +9,10 @@ exports.submitStage = async (req, res) => {
       duree,
       tuteur,
       description,
+      dateDebut,
+      dateFin,
       status: 'en attente',
-      etudiantId: req.user.id // Assurez-vous que ce champ existe dans le modèle Stage
+      etudiantId: req.user.id // Assurez-vous que ce champ existe dans le modèle Stage et la table
     });
     res.json({ message: "Demande enregistrée" });
   } catch (err) {

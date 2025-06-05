@@ -1,28 +1,26 @@
 const express = require('express');
 const router = express.Router();
-// Ajoutez ici vos middlewares si besoin (auth, etc.)
-const { Entreprise } = require('../models');
+const { Stage } = require('../models');
+const verifyToken = require('../middlewares/authMiddleware');
 
-// Exemple : obtenir la liste des entreprises
-router.get('/', async (req, res) => {
+// Liste des demandes reçues par l'entreprise connectée
+router.get('/demandes', verifyToken, async (req, res) => {
   try {
-    const entreprises = await Entreprise.findAll();
-    res.json(entreprises);
+    // Pour le test, retourne toutes les demandes de stage
+    const demandes = await Stage.findAll();
+    res.json(
+      demandes.map(d => ({
+        id: d.id,
+        titre: d.titre,
+        description: d.description,
+        statut: d.status,
+        commentaireEntreprise: d.commentaire,
+        etudiantNom: d.etudiantId // à remplacer par le nom réel si jointure
+      }))
+    );
   } catch (err) {
-    res.status(500).json({ error: "Erreur lors de la récupération des entreprises" });
+    res.status(500).json({ error: "Erreur lors de la récupération des demandes" });
   }
 });
-
-// Exemple : créer une entreprise (à adapter selon votre logique)
-router.post('/', async (req, res) => {
-  try {
-    const entreprise = await Entreprise.create(req.body);
-    res.status(201).json(entreprise);
-  } catch (err) {
-    res.status(400).json({ error: "Erreur lors de la création de l'entreprise" });
-  }
-});
-
-// Ajoutez ici d'autres routes spécifiques à l'entreprise si besoin
 
 module.exports = router;

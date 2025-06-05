@@ -1,10 +1,98 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-const Affectation = () => (
-  <div className="container mt-5">
-    <h2>Affectation d'entreprises aux étudiants</h2>
-    {/* À compléter selon vos besoins */}
-  </div>
-);
+const Affectation = () => {
+  const [etudiants, setEtudiants] = useState([]);
+  const [entreprises, setEntreprises] = useState([]);
+  const [affectations, setAffectations] = useState({});
+  const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/etudiants")
+      .then((res) => setEtudiants(res.data))
+      .catch(() => setEtudiants([]));
+    axios
+      .get("http://localhost:5000/api/entreprises")
+      .then((res) => setEntreprises(res.data))
+      .catch(() => setEntreprises([]));
+  }, []);
+
+  const handleChange = (etudiantId, entrepriseId) => {
+    setAffectations({ ...affectations, [etudiantId]: entrepriseId });
+  };
+
+  const handleAffecter = async (etudiantId) => {
+    try {
+      // À adapter selon votre backend
+      await axios.post("http://localhost:5000/api/admin/affectation", {
+        etudiantId,
+        entrepriseId: affectations[etudiantId],
+      });
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 2000);
+    } catch {
+      alert("Erreur lors de l'affectation");
+    }
+  };
+
+  return (
+    <div className="container mt-5">
+      <h2>Affectation d'entreprises aux étudiants</h2>
+      {success && (
+        <div
+          className="alert alert-success text-center"
+          style={{
+            fontSize: "1.1rem",
+            borderRadius: "1rem",
+          }}
+        >
+          Affectation enregistrée !
+        </div>
+      )}
+      <table className="table mt-4">
+        <thead>
+          <tr>
+            <th>Étudiant</th>
+            <th>Entreprise à affecter</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {etudiants.map((etudiant) => (
+            <tr key={etudiant.id}>
+              <td>
+                {etudiant.nom} {etudiant.prenom}
+              </td>
+              <td>
+                <select
+                  className="form-select"
+                  value={affectations[etudiant.id] || ""}
+                  onChange={(e) => handleChange(etudiant.id, e.target.value)}
+                >
+                  <option value="">Choisir une entreprise</option>
+                  {entreprises.map((ent) => (
+                    <option key={ent.id} value={ent.id}>
+                      {ent.nom}
+                    </option>
+                  ))}
+                </select>
+              </td>
+              <td>
+                <button
+                  className="btn btn-success btn-sm"
+                  disabled={!affectations[etudiant.id]}
+                  onClick={() => handleAffecter(etudiant.id)}
+                >
+                  Affecter
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
 
 export default Affectation;

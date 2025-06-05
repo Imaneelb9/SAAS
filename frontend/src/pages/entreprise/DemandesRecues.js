@@ -5,10 +5,12 @@ const DemandesRecues = () => {
   const [demandes, setDemandes] = useState([]);
 
   useEffect(() => {
-    // Remplacez par l'appel réel à votre API
-    axios.get("/api/entreprises/demandes", {
+    axios.get("http://localhost:5000/api/entreprises/demandes", {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-    }).then(res => setDemandes(res.data));
+    }).then(res => setDemandes(res.data))
+      .catch(err => {
+        alert("Erreur : " + (err.response?.data?.error || err.message));
+      });
   }, []);
 
   const handleAction = (id, action, commentaire) => {

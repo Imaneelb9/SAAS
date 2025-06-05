@@ -7,7 +7,9 @@ const AddStage = () => {
     entreprise: '',
     duree: '',
     tuteur: '',
-    description: ''
+    description: '',
+    dateDebut: '',
+    dateFin: ''
   });
   const [success, setSuccess] = useState(false);
 
@@ -20,7 +22,7 @@ const AddStage = () => {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setSuccess(true);
-      setForm({ titre: '', entreprise: '', duree: '', tuteur: '', description: '' });
+      setForm({ titre: '', entreprise: '', duree: '', tuteur: '', description: '', dateDebut: '', dateFin: '' });
       setTimeout(() => setSuccess(false), 2500); // cache la teqet après 2.5s
     } catch (err) {
       alert('Erreur lors de la soumission');
@@ -50,6 +52,14 @@ const AddStage = () => {
         </div>
         <div className="mb-3">
           <textarea name="description" className="form-control" onChange={handleChange} value={form.description} placeholder="Description" required />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Date de début</label>
+          <input type="date" name="dateDebut" className="form-control" onChange={handleChange} value={form.dateDebut} required />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Date de fin</label>
+          <input type="date" name="dateFin" className="form-control" onChange={handleChange} value={form.dateFin} required />
         </div>
         <button type="submit" className="btn btn-primary">Envoyer la demande</button>
       </form>
