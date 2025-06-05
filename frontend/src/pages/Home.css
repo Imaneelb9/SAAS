@@ -1,0 +1,68 @@
+.home-main {
+  background: linear-gradient(120deg, #f8f9fa 60%, #e3eafc 100%);
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+.home-title {
+  color: #2c3e50;
+  font-weight: bold;
+  text-shadow: 1px 2px 8px #e3eafc;
+}
+
+.home-card {
+  border-radius: 18px;
+  border: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+  min-height: 340px;
+}
+
+.home-card-etudiant {
+  background: linear-gradient(135deg, #e3f0ff 80%, #b6e0fe 100%);
+}
+.home-card-entreprise {
+  background: linear-gradient(135deg, #fff4e3 80%, #ffe0b6 100%);
+}
+.home-card-admin {
+  background: linear-gradient(135deg, #f3e3ff 80%, #dab6fe 100%);
+}
+.home-card-tuteur {
+  background: linear-gradient(135deg, #e3ffe3 80%, #b6feb6 100%);
+}
+
+.home-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.18);
+}
+
+.home-card-title {
+  font-size: 1.6rem;
+  color: #007bff;
+  margin-bottom: 12px;
+  font-weight: bold;
+}
+
+.home-card-text {
+  color: #444;
+  font-size: 1.08rem;
+  margin-bottom: 18px;
+}
+
+.home-btn {
+  min-width: 120px;
+  font-weight: 500;
+  border-radius: 8px;
+}
+
+.card {
+  border-radius: 15px;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.03);
+}
+
+.card-title {
+  font-weight: bold;
+}
