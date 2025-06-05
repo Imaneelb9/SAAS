@@ -12,7 +12,8 @@ const Stage = sequelize.define('Stage', {
   tuteur: DataTypes.STRING,
   entreprise: DataTypes.STRING,
   etudiantId: DataTypes.INTEGER,
-  entrepriseId: DataTypes.INTEGER // <-- Ajoutez ce champ pour la liaison avec l'entreprise
+  entrepriseId: DataTypes.INTEGER,
+  type: DataTypes.STRING // <-- Ajoutez cette colonne pour le type de stage (Sur Place, À distance, Mixte)
 });
 
 module.exports = Stage;

@@ -8,13 +8,25 @@ const EtudiantHome = () => (
       <div className="col-md-5 mb-3">
         <div className="card shadow p-3 text-center">
           <h5>Mes demandes de stage</h5>
-          <Link to="/etudiant/mes-demandes" className="btn btn-primary mt-2">Voir mes demandes</Link>
+          <Link to="/etudiant/mes-demandes" className="btn btn-primary mt-2">
+            Voir mes demandes
+          </Link>
         </div>
       </div>
       <div className="col-md-5 mb-3">
         <div className="card shadow p-3 text-center">
           <h5>Soumettre une nouvelle demande</h5>
-          <Link to="/etudiant/ajouter-demande" className="btn btn-success mt-2">Ajouter une demande</Link>
+          <Link to="/etudiant/ajouter-demande" className="btn btn-success mt-2">
+            Ajouter une demande
+          </Link>
+        </div>
+      </div>
+      <div className="col-md-10 mb-3">
+        <div className="card shadow p-3 text-center">
+          <h5>Ajouter ou modifier mon CV et ma lettre de motivation</h5>
+          <Link to="/etudiant/cv-lettre" className="btn btn-info mt-2">
+            Gérer mon CV et ma lettre de motivation
+          </Link>
         </div>
       </div>
     </div>

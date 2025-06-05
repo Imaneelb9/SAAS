@@ -9,6 +9,7 @@ const Register = () => {
     email: "",
     motdepasse: "",
     cne: "",
+    niveau: "",
     filiere: "",
     telephone: ""
   });
@@ -52,6 +53,9 @@ const Register = () => {
               </div>
               <div className="mb-3">
                 <input type="text" className="form-control" name="cne" placeholder="CNE" value={form.cne} onChange={handleChange} required />
+              </div>
+              <div className="mb-3">
+                <input type="text" className="form-control" name="niveau" placeholder="Niveau d'étude" value={form.niveau} onChange={handleChange} required />
               </div>
               <div className="mb-3">
                 <input type="text" className="form-control" name="filiere" placeholder="Filière" value={form.filiere} onChange={handleChange} required />

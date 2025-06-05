@@ -4,7 +4,15 @@ import './Home.css';
 
 const Home = () => {
   return (
-    <div className="container mt-5 home-main">
+    <div
+      className="container mt-5 home-main"
+      style={{
+        backgroundImage: "url('/images/bg-stage.jpg')", // Placez votre image dans public/images/bg-stage.jpg
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        minHeight: "100vh"
+      }}
+    >
       <h1 className="text-center mb-5 home-title display-3 fw-bold" style={{ letterSpacing: "2px" }}>
         Bienvenue sur le Gestionnaire de Stages
       </h1>

@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 exports.register = async (req, res) => {
-  const { nom, prenom, email, motdepasse, role, cne, filiere, secteur, adresse, siteWeb, description, telephone } = req.body;
+  const { nom, prenom, email, motdepasse, role, cne, niveau, filiere, secteur, adresse, siteWeb, description, telephone } = req.body;
   try {
     // Toujours enregistrer l'email en minuscule pour éviter les doublons
     const hash = await bcrypt.hash(motdepasse, 10);
@@ -18,7 +18,8 @@ exports.register = async (req, res) => {
     if (role === "etudiant") {
       await Etudiant.create({
         userId: user.id,
-        niveau: cne || "",
+        cne: cne || "",
+        niveau: niveau || "", // <-- Enregistre le niveau d'étude ici
         filiere: filiere || "",
         cv: "",
         lettreMotivation: ""

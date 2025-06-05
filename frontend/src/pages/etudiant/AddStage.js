@@ -9,7 +9,8 @@ const AddStage = () => {
     tuteur: '',
     description: '',
     dateDebut: '',
-    dateFin: ''
+    dateFin: '',
+    type: '' // Ajout du type de stage
   });
   const [success, setSuccess] = useState(false);
 
@@ -19,13 +20,16 @@ const AddStage = () => {
     e.preventDefault();
     try {
       await axios.post("http://localhost:5000/api/stages", form, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        headers: { 
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+          // Ne pas ajouter Content-Type ici, axios le gère automatiquement pour les objets JS
+        }
       });
       setSuccess(true);
-      setForm({ titre: '', entreprise: '', duree: '', tuteur: '', description: '', dateDebut: '', dateFin: '' });
-      setTimeout(() => setSuccess(false), 2500); // cache la teqet après 2.5s
+      setForm({ titre: '', entreprise: '', duree: '', tuteur: '', description: '', dateDebut: '', dateFin: '', type: '' });
+      setTimeout(() => setSuccess(false), 2500);
     } catch (err) {
-      alert('Erreur lors de la soumission');
+      alert('Erreur lors de la soumission : ' + (err.response?.data?.details || err.message));
     }
   };
 
@@ -60,6 +64,15 @@ const AddStage = () => {
         <div className="mb-3">
           <label className="form-label">Date de fin</label>
           <input type="date" name="dateFin" className="form-control" onChange={handleChange} value={form.dateFin} required />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Type de stage</label>
+          <select name="type" className="form-select" value={form.type} onChange={handleChange} required>
+            <option value="">Choisir...</option>
+            <option value="Sur Place">Sur Place</option>
+            <option value="À distance">À distance</option>
+            <option value="Mixte">Mixte</option>
+          </select>
         </div>
         <button type="submit" className="btn btn-primary">Envoyer la demande</button>
       </form>

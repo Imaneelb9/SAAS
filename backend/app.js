@@ -5,10 +5,11 @@ require('dotenv').config();
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:3000', // autorise le frontend React (port 3000)
+  origin: 'http://localhost:3000',
   credentials: true
 }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // Ajoutez ceci pour gérer les formulaires multipart
 
 // ROUTES
 app.use('/api/stages', require('./routes/stageRoutes'));
