@@ -9,6 +9,7 @@ const AddStage = () => {
     tuteur: '',
     description: ''
   });
+  const [success, setSuccess] = useState(false);
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -18,7 +19,9 @@ const AddStage = () => {
       await axios.post("http://localhost:5000/api/stages", form, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
-      alert('Demande envoyée');
+      setSuccess(true);
+      setForm({ titre: '', entreprise: '', duree: '', tuteur: '', description: '' });
+      setTimeout(() => setSuccess(false), 2500); // cache la teqet après 2.5s
     } catch (err) {
       alert('Erreur lors de la soumission');
     }
@@ -27,21 +30,26 @@ const AddStage = () => {
   return (
     <div className="container mt-5">
       <h2>Nouvelle demande de stage</h2>
+      {success && (
+        <div className="alert alert-success text-center" style={{ fontSize: "1.2rem", borderRadius: "1rem" }}>
+          🎉 Demande envoyée avec succès !
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <input name="titre" className="form-control" onChange={handleChange} placeholder="Titre" required />
+          <input name="titre" className="form-control" onChange={handleChange} value={form.titre} placeholder="Titre" required />
         </div>
         <div className="mb-3">
-          <input name="entreprise" className="form-control" onChange={handleChange} placeholder="Entreprise" required />
+          <input name="entreprise" className="form-control" onChange={handleChange} value={form.entreprise} placeholder="Entreprise" required />
         </div>
         <div className="mb-3">
-          <input name="duree" className="form-control" onChange={handleChange} placeholder="Durée" required />
+          <input name="duree" className="form-control" onChange={handleChange} value={form.duree} placeholder="Durée" required />
         </div>
         <div className="mb-3">
-          <input name="tuteur" className="form-control" onChange={handleChange} placeholder="Tuteur" required />
+          <input name="tuteur" className="form-control" onChange={handleChange} value={form.tuteur} placeholder="Tuteur" required />
         </div>
         <div className="mb-3">
-          <textarea name="description" className="form-control" onChange={handleChange} placeholder="Description" required />
+          <textarea name="description" className="form-control" onChange={handleChange} value={form.description} placeholder="Description" required />
         </div>
         <button type="submit" className="btn btn-primary">Envoyer la demande</button>
       </form>

@@ -10,17 +10,23 @@ exports.submitStage = async (req, res) => {
       tuteur,
       description,
       status: 'en attente',
-      etudiantId: req.user.id
+      etudiantId: req.user.id // Assurez-vous que ce champ existe dans le modèle Stage
     });
     res.json({ message: "Demande enregistrée" });
   } catch (err) {
-    res.status(500).json({ error: "Erreur lors de l'envoi" });
+    console.error("Erreur lors de la création du stage :", err);
+    res.status(500).json({ error: "Erreur lors de l'envoi", details: err.message });
   }
 };
 
 exports.getMyStages = async (req, res) => {
-  const stages = await Stage.findAll({ where: { etudiantId: req.user.id } });
-  res.json(stages);
+  try {
+    const stages = await Stage.findAll({ where: { etudiantId: req.user.id } });
+    res.json(stages);
+  } catch (err) {
+    console.error("Erreur lors de la récupération des stages :", err);
+    res.status(500).json({ error: "Erreur lors de la récupération", details: err.message });
+  }
 };
 
 exports.getStageById = async (req, res) => {
