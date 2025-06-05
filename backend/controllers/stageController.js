@@ -1,9 +1,14 @@
-const { Stage } = require('../models');
+const { Stage, Entreprise, Candidature } = require('../models');
 
 exports.submitStage = async (req, res) => {
   const { titre, entreprise, duree, tuteur, description, dateDebut, dateFin } = req.body;
   try {
-    await Stage.create({
+    // Cherche l'entreprise par son nom (champ "entreprise" du formulaire)
+    const entrepriseObj = await Entreprise.findOne({ where: { nom: entreprise } });
+    if (!entrepriseObj) {
+      return res.status(400).json({ error: "Entreprise non trouvée. Veuillez saisir un nom d'entreprise existant." });
+    }
+    const stage = await Stage.create({
       titre,
       entreprise,
       duree,
@@ -12,11 +17,25 @@ exports.submitStage = async (req, res) => {
       dateDebut,
       dateFin,
       status: 'en attente',
-      etudiantId: req.user.id // Assurez-vous que ce champ existe dans le modèle Stage et la table
+      etudiantId: req.user.id,
+      entrepriseId: entrepriseObj.id
     });
+
+    // Vérifiez que le modèle Candidature est bien importé et que la table existe
+    // Ajoutez un log pour debug
+    console.log("Création de la candidature pour stageId:", stage.id, "etudiantId:", req.user.id, "entrepriseId:", entrepriseObj.id);
+
+    await Candidature.create({
+      stageId: stage.id,
+      etudiantId: req.user.id,
+      entrepriseId: entrepriseObj.id,
+      status: 'en attente',
+      commentaireEntreprise: ''
+    });
+
     res.json({ message: "Demande enregistrée" });
   } catch (err) {
-    console.error("Erreur lors de la création du stage :", err);
+    console.error("Erreur lors de la création du stage/candidature :", err);
     res.status(500).json({ error: "Erreur lors de l'envoi", details: err.message });
   }
 };

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { User, Stage } = require('../models');
+const { User, Stage, Etudiant, Entreprise } = require('../models');
 
 // Vérification de la route
 router.get('/', (req, res) => {
@@ -38,6 +38,49 @@ router.get('/statistiques', async (req, res) => {
     res.json({ attente, valide, refuse });
   } catch (err) {
     res.status(500).json({ error: "Erreur lors de la récupération des statistiques" });
+  }
+});
+
+// Liste de tous les étudiants (pour l'affectation)
+router.get('/etudiants', async (req, res) => {
+  try {
+    const etudiants = await Etudiant.findAll({
+      include: [{ model: User, attributes: ['nom', 'prenom'] }]
+    });
+    res.json(etudiants.map(e => ({
+      id: e.id,
+      nom: e.User?.nom,
+      prenom: e.User?.prenom
+    })));
+  } catch (err) {
+    res.status(500).json({ error: "Erreur lors de la récupération des étudiants" });
+  }
+});
+
+// Liste de toutes les entreprises (pour l'affectation)
+router.get('/entreprises', async (req, res) => {
+  try {
+    const entreprises = await Entreprise.findAll();
+    res.json(entreprises.map(e => ({
+      id: e.id,
+      nom: e.nom
+    })));
+  } catch (err) {
+    res.status(500).json({ error: "Erreur lors de la récupération des entreprises" });
+  }
+});
+
+// Affecter une entreprise à un étudiant
+router.post('/affectation', async (req, res) => {
+  const { etudiantId, entrepriseId } = req.body;
+  try {
+    const etudiant = await require('../models').Etudiant.findByPk(etudiantId);
+    if (!etudiant) return res.status(404).json({ error: "Étudiant non trouvé" });
+    etudiant.entrepriseId = entrepriseId;
+    await etudiant.save();
+    res.json({ message: "Affectation enregistrée" });
+  } catch (err) {
+    res.status(500).json({ error: "Erreur lors de l'affectation" });
   }
 });
 

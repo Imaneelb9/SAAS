@@ -8,12 +8,18 @@ const Affectation = () => {
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
+    // Récupère la liste des étudiants depuis l'API admin
     axios
-      .get("http://localhost:5000/api/etudiants")
+      .get("http://localhost:5000/api/admin/etudiants", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      })
       .then((res) => setEtudiants(res.data))
       .catch(() => setEtudiants([]));
+    // Récupère la liste des entreprises depuis l'API admin
     axios
-      .get("http://localhost:5000/api/entreprises")
+      .get("http://localhost:5000/api/admin/entreprises", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      })
       .then((res) => setEntreprises(res.data))
       .catch(() => setEntreprises([]));
   }, []);
@@ -24,11 +30,16 @@ const Affectation = () => {
 
   const handleAffecter = async (etudiantId) => {
     try {
-      // À adapter selon votre backend
-      await axios.post("http://localhost:5000/api/admin/affectation", {
-        etudiantId,
-        entrepriseId: affectations[etudiantId],
-      });
+      await axios.post(
+        "http://localhost:5000/api/admin/affectation",
+        {
+          etudiantId,
+          entrepriseId: affectations[etudiantId],
+        },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       setSuccess(true);
       setTimeout(() => setSuccess(false), 2000);
     } catch {
@@ -59,36 +70,44 @@ const Affectation = () => {
           </tr>
         </thead>
         <tbody>
-          {etudiants.map((etudiant) => (
-            <tr key={etudiant.id}>
-              <td>
-                {etudiant.nom} {etudiant.prenom}
-              </td>
-              <td>
-                <select
-                  className="form-select"
-                  value={affectations[etudiant.id] || ""}
-                  onChange={(e) => handleChange(etudiant.id, e.target.value)}
-                >
-                  <option value="">Choisir une entreprise</option>
-                  {entreprises.map((ent) => (
-                    <option key={ent.id} value={ent.id}>
-                      {ent.nom}
-                    </option>
-                  ))}
-                </select>
-              </td>
-              <td>
-                <button
-                  className="btn btn-success btn-sm"
-                  disabled={!affectations[etudiant.id]}
-                  onClick={() => handleAffecter(etudiant.id)}
-                >
-                  Affecter
-                </button>
+          {etudiants.length === 0 ? (
+            <tr>
+              <td colSpan={3} className="text-center">
+                Aucun étudiant à afficher
               </td>
             </tr>
-          ))}
+          ) : (
+            etudiants.map((etudiant) => (
+              <tr key={etudiant.id}>
+                <td>
+                  {etudiant.nom} {etudiant.prenom}
+                </td>
+                <td>
+                  <select
+                    className="form-select"
+                    value={affectations[etudiant.id] || ""}
+                    onChange={(e) => handleChange(etudiant.id, e.target.value)}
+                  >
+                    <option value="">Choisir une entreprise</option>
+                    {entreprises.map((ent) => (
+                      <option key={ent.id} value={ent.id}>
+                        {ent.nom}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                <td>
+                  <button
+                    className="btn btn-success btn-sm"
+                    disabled={!affectations[etudiant.id]}
+                    onClick={() => handleAffecter(etudiant.id)}
+                  >
+                    Affecter
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

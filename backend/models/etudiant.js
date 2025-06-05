@@ -7,6 +7,7 @@ const Etudiant = sequelize.define('Etudiant', {
   filiere: DataTypes.STRING,
   cv: DataTypes.STRING,
   lettreMotivation: DataTypes.STRING,
+  entrepriseId: DataTypes.INTEGER, // <-- Ajoutez ce champ
 });
 
 Etudiant.belongsTo(User, { foreignKey: 'userId' });

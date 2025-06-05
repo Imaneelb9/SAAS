@@ -8,10 +8,11 @@ const Stage = sequelize.define('Stage', {
   dateFin: DataTypes.DATE,
   status: DataTypes.ENUM('en attente', 'valide', 'refuse'),
   commentaire: DataTypes.STRING,
-  duree: DataTypes.STRING, // Ajoutez ce champ si utilisé dans le frontend
-  tuteur: DataTypes.STRING, // Ajoutez ce champ si utilisé dans le frontend
-  entreprise: DataTypes.STRING, // Ajoutez ce champ si utilisé dans le frontend
-  etudiantId: DataTypes.INTEGER // Ajoutez ce champ pour la liaison avec l'étudiant
+  duree: DataTypes.STRING,
+  tuteur: DataTypes.STRING,
+  entreprise: DataTypes.STRING,
+  etudiantId: DataTypes.INTEGER,
+  entrepriseId: DataTypes.INTEGER // <-- Ajoutez ce champ pour la liaison avec l'entreprise
 });
 
 module.exports = Stage;
