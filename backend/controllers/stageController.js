@@ -1,13 +1,16 @@
 const { Stage, Entreprise, Candidature } = require('../models');
 
 exports.submitStage = async (req, res) => {
-  const { titre, entreprise, duree, tuteur, description, dateDebut, dateFin } = req.body;
+  const { titre, entreprise, duree, tuteur, description, dateDebut, dateFin, type } = req.body;
   try {
     // Cherche l'entreprise par son nom (champ "entreprise" du formulaire)
     const entrepriseObj = await Entreprise.findOne({ where: { nom: entreprise } });
     if (!entrepriseObj) {
       return res.status(400).json({ error: "Entreprise non trouvée. Veuillez saisir un nom d'entreprise existant." });
     }
+    // Log pour debug
+    console.log("Entreprise trouvée pour la demande :", entrepriseObj.id, entrepriseObj.nom);
+
     const stage = await Stage.create({
       titre,
       entreprise,
@@ -16,14 +19,14 @@ exports.submitStage = async (req, res) => {
       description,
       dateDebut,
       dateFin,
+      type,
       status: 'en attente',
       etudiantId: req.user.id,
-      entrepriseId: entrepriseObj.id
+      entrepriseId: entrepriseObj.id // <-- Vérifiez que ce champ est bien renseigné
     });
 
-    // Vérifiez que le modèle Candidature est bien importé et que la table existe
-    // Ajoutez un log pour debug
-    console.log("Création de la candidature pour stageId:", stage.id, "etudiantId:", req.user.id, "entrepriseId:", entrepriseObj.id);
+    // Vérifiez que le stage est bien créé avec le bon entrepriseId
+    console.log("Stage créé :", stage.id, "entrepriseId:", stage.entrepriseId);
 
     await Candidature.create({
       stageId: stage.id,
@@ -82,3 +85,6 @@ exports.deleteStage = async (req, res) => {
     res.status(500).json({ error: "Erreur lors de la suppression" });
   }
 };
+
+// Lorsqu'une entreprise accepte/refuse ou lorsqu'un admin affecte une entreprise à un étudiant,
+// mettez à jour le champ status dans la table Stage (ex: "stagiaire" ou "refus").

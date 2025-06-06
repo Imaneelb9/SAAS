@@ -1,3 +1,4 @@
+
 function checkRole(role) {
   return (req, res, next) => {
     // Pour debug, affichez le rôle du token

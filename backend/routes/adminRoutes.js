@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { User, Stage, Etudiant, Entreprise } = require('../models');
+const { User, Stage, Etudiant, Entreprise, Tuteur } = require('../models');
+const verifyToken = require('../middlewares/authMiddleware');
 
 // Vérification de la route
 router.get('/', (req, res) => {
@@ -81,6 +82,62 @@ router.post('/affectation', async (req, res) => {
     res.json({ message: "Affectation enregistrée" });
   } catch (err) {
     res.status(500).json({ error: "Erreur lors de l'affectation" });
+  }
+});
+
+// Affecter une entreprise à un étudiant et mettre à jour le statut du stage
+router.post('/affecter', verifyToken, async (req, res) => {
+  try {
+    const { stageId, entrepriseId } = req.body;
+    // Met à jour l'entreprise et le statut du stage à "stagiaire"
+    const [updated] = await require('../models').Stage.update(
+      { entrepriseId, status: 'stagiaire' },
+      { where: { id: stageId } }
+    );
+    if (updated === 0) {
+      return res.status(404).json({ error: "Stage non trouvé" });
+    }
+    res.json({ message: "Entreprise affectée et statut mis à jour" });
+  } catch (err) {
+    res.status(500).json({ error: "Erreur lors de l'affectation" });
+  }
+});
+
+// Liste des tuteurs (GET)
+router.get('/tuteurs', verifyToken, async (req, res) => {
+  try {
+    // Vérifiez que l'association existe bien :
+    // Tuteur.belongsTo(User, { foreignKey: 'userId' });
+    const tuteurs = await Tuteur.findAll({
+      include: [{ model: User, attributes: ['email'] }]
+    });
+    res.json(
+      tuteurs.map(t => ({
+        id: t.id,
+        nom: t.nom || "", // Ajoutez une valeur par défaut pour éviter undefined
+        fonction: t.fonction || "",
+        entreprise: t.entreprise || "",
+        email: t.User ? t.User.email : "",
+        actif: t.actif !== false
+      }))
+    );
+  } catch (err) {
+    console.error("Erreur admin/tuteurs :", err);
+    res.status(500).json({ error: "Erreur lors de la récupération des tuteurs", details: err.message });
+  }
+});
+
+// Activer/désactiver un tuteur (PUT)
+router.put('/tuteurs/:id/toggle', verifyToken, async (req, res) => {
+  try {
+    const tuteur = await Tuteur.findByPk(req.params.id);
+    if (!tuteur) return res.status(404).json({ error: "Tuteur non trouvé" });
+    tuteur.actif = req.body.actif;
+    await tuteur.save();
+    res.json({ message: "Statut du tuteur mis à jour" });
+  } catch (err) {
+    console.error("Erreur admin/tuteurs toggle :", err);
+    res.status(500).json({ error: "Erreur lors de la mise à jour du tuteur", details: err.message });
   }
 });
 

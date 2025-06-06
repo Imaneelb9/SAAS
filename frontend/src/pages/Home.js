@@ -59,6 +59,20 @@ const Home = () => {
           </div>
         </div>
 
+        {/* Tuteur */}
+        <div className="col-md-3 mb-4">
+          <div className="card text-center shadow home-card home-card-tuteur">
+            <div className="card-body">
+              <h4 className="card-title home-card-title">🧑‍🏫 Espace Tuteur</h4>
+              <p className="card-text home-card-text">
+                <strong>Accédez à votre espace tuteur</strong> pour suivre les étudiants encadrés, valider les rapports et échanger avec l'administration.
+              </p>
+              <Link to="/tuteur/register" className="btn btn-primary m-1 home-btn">S'inscrire</Link>
+              <Link to="/tuteur/login" className="btn btn-outline-primary m-1 home-btn">Se connecter</Link>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   );

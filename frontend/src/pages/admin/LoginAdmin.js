@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const LoginAdmin = () => {
-  const [form, setForm] = useState({ email: "", motdepasse: "" });
-  const navigate = useNavigate();
+const ADMIN_CODE = "ADMIN2024"; // Changez ce code selon votre besoin
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+const LoginAdmin = () => {
+  const [code, setCode] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Ici, faites l'appel API pour la connexion admin, puis redirigez
-    navigate("/admin");
+    if (code === ADMIN_CODE) {
+      localStorage.setItem("admin", "true");
+      // Redirigez vers la page d'accueil admin principale
+      navigate("/admin");
+    } else {
+      alert("Code incorrect !");
+    }
   };
 
   return (
@@ -20,33 +23,21 @@ const LoginAdmin = () => {
       <div className="row justify-content-center">
         <div className="col-md-5">
           <div className="card shadow p-4">
-            <h2 className="mb-4 text-center">Connexion Admin</h2>
+            <h2 className="mb-4 text-center">Accès Admin</h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <input
-                  type="email"
+                  type="text"
                   className="form-control"
-                  name="email"
-                  placeholder="Email"
-                  value={form.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="mb-3">
-                <input
-                  type="password"
-                  className="form-control"
-                  name="motdepasse"
-                  placeholder="Mot de passe"
-                  value={form.motdepasse}
-                  onChange={handleChange}
+                  placeholder="Code d'accès admin"
+                  value={code}
+                  onChange={e => setCode(e.target.value)}
                   required
                 />
               </div>
               <div className="d-grid">
                 <button type="submit" className="btn btn-dark">
-                  Se connecter
+                  Entrer
                 </button>
               </div>
             </form>

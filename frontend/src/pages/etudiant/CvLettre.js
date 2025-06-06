@@ -4,49 +4,99 @@ import axios from "axios";
 const CvLettre = () => {
   const [cv, setCv] = useState(null);
   const [lettre, setLettre] = useState(null);
-  const [success, setSuccess] = useState("");
+  const [successCv, setSuccessCv] = useState("");
+  const [successLettre, setSuccessLettre] = useState("");
 
   const handleCvChange = (e) => setCv(e.target.files[0]);
   const handleLettreChange = (e) => setLettre(e.target.files[0]);
 
-  const handleUpload = async (type) => {
+  const handleUploadCv = async () => {
     const data = new FormData();
-    if (type === "cv" && cv) data.append("cv", cv);
-    if (type === "lettre" && lettre) data.append("lettreMotivation", lettre);
+    if (cv) data.append("cv", cv);
     try {
-      await axios.post("http://localhost:5000/api/etudiants/upload", data, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      await axios.post("http://localhost:5000/api/etudiants/upload-cv", data, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
-      setSuccess(type === "cv" ? "CV importé avec succès !" : "Lettre de motivation importée avec succès !");
-      setTimeout(() => setSuccess(""), 2000);
+      setSuccessCv("✅ CV importé avec succès !");
+      setTimeout(() => setSuccessCv(""), 3000);
     } catch {
-      setSuccess("Erreur lors de l'import.");
+      setSuccessCv("❌ Erreur lors de l'import du CV.");
+    }
+  };
+
+  const handleUploadLettre = async () => {
+    const data = new FormData();
+    if (lettre) data.append("lettreMotivation", lettre);
+    try {
+      await axios.post("http://localhost:5000/api/etudiants/upload-lettre", data, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      setSuccessLettre("✅ Lettre de motivation importée avec succès !");
+      setTimeout(() => setSuccessLettre(""), 3000);
+    } catch {
+      setSuccessLettre("❌ Erreur lors de l'import de la lettre de motivation.");
     }
   };
 
   return (
     <div className="container mt-5">
-      <h2 className="mb-4 text-center">Ajouter ou modifier mon CV et ma lettre de motivation</h2>
-      {success && (
-        <div className="alert alert-success text-center">{success}</div>
-      )}
+      <h2 className="text-center mb-5">
+        Ajouter ou modifier mon CV et ma lettre de motivation
+      </h2>
+
+      {/* Bloc CV */}
       <div className="row justify-content-center">
-        <div className="col-md-5 mb-3">
-          <div className="card shadow p-3 text-center">
-            <h5>Importer mon CV (PDF)</h5>
-            <input type="file" accept=".pdf" onChange={handleCvChange} className="form-control mb-2" />
-            <button className="btn btn-primary" onClick={() => handleUpload("cv")} disabled={!cv}>
-              Importer le CV
-            </button>
+        <div className="col-md-8">
+          <div className="card shadow p-4">
+            <h4 className="text-center mb-3">📄 Importer mon CV (PDF)</h4>
+            <input
+              type="file"
+              accept=".pdf"
+              onChange={handleCvChange}
+              className="form-control mb-3"
+            />
+            <div className="text-center">
+              <button
+                className="btn btn-success"
+                onClick={handleUploadCv}
+                disabled={!cv}
+              >
+                Importer le CV
+              </button>
+            </div>
+            {successCv && (
+              <div className="alert alert-info text-center mt-3">{successCv}</div>
+            )}
           </div>
         </div>
-        <div className="col-md-5 mb-3">
-          <div className="card shadow p-3 text-center">
-            <h5>Importer ma lettre de motivation (PDF)</h5>
-            <input type="file" accept=".pdf" onChange={handleLettreChange} className="form-control mb-2" />
-            <button className="btn btn-primary" onClick={() => handleUpload("lettre")} disabled={!lettre}>
-              Importer la lettre de motivation
-            </button>
+      </div>
+
+      {/* Séparation visuelle */}
+      <hr className="my-5" />
+
+      {/* Bloc Lettre de motivation */}
+      <div className="row justify-content-center">
+        <div className="col-md-8">
+          <div className="card shadow p-4">
+            <h4 className="text-center mb-3">✉️ Importer ma lettre de motivation (PDF)</h4>
+            <input
+              type="file"
+              accept=".pdf"
+              onChange={handleLettreChange}
+              className="form-control mb-3"
+            />
+            <div className="text-center">
+              <button
+                className="btn btn-primary"
+                onClick={handleUploadLettre}
+                disabled={!lettre}
+              >
+                Importer la lettre de motivation
+              </button>
+            </div>
+            {successLettre && (
+              <div className="alert alert-info text-center mt-3">{successLettre}</div>
+            )}
           </div>
         </div>
       </div>
@@ -55,3 +105,6 @@ const CvLettre = () => {
 };
 
 export default CvLettre;
+
+// Ce composant concerne l'espace étudiant, pas l'espace admin.
+// Pour voir un changement dans l'affichage de l'espace admin, modifiez les fichiers dans src/pages/admin/ (ex: AdminHome.js, ListeUtilisateurs.js, etc.)

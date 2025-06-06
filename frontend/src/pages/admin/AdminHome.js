@@ -7,19 +7,39 @@ const AdminHome = () => {
   return (
     <div className="container mt-5">
       <h2 className="mb-4 text-center">Espace Administration</h2>
-      <div className="d-flex flex-column align-items-center">
-        <button className="btn btn-primary mb-2" onClick={() => navigate("/admin/utilisateurs")}>
-          Gestion des comptes utilisateurs
-        </button>
-        <button className="btn btn-info mb-2" onClick={() => navigate("/admin/statistiques")}>
-          Statistiques des stages
-        </button>
-        <button className="btn btn-success mb-2" onClick={() => navigate("/admin/affectation")}>
-          Affectation entreprises/étudiants
-        </button>
-        <button className="btn btn-secondary" onClick={() => navigate("/tuteur")}>
-          Espace Tuteur
-        </button>
+      <div className="row justify-content-center">
+        <div className="col-md-4 mb-3">
+          <div className="card shadow p-3 text-center">
+            <h5>Gestion des comptes utilisateurs</h5>
+            <button className="btn btn-primary mt-2" onClick={() => navigate("/admin/utilisateurs")}>
+              Activer / Désactiver des comptes
+            </button>
+          </div>
+        </div>
+        <div className="col-md-4 mb-3">
+          <div className="card shadow p-3 text-center">
+            <h5>Gestion des comptes tuteurs</h5>
+            <button className="btn btn-warning mt-2" onClick={() => navigate("/admin/tuteurs")}>
+              Gérer les tuteurs
+            </button>
+          </div>
+        </div>
+        <div className="col-md-4 mb-3">
+          <div className="card shadow p-3 text-center">
+            <h5>Statistiques des stages</h5>
+            <button className="btn btn-info mt-2" onClick={() => navigate("/admin/statistiques")}>
+              Voir les statistiques
+            </button>
+          </div>
+        </div>
+        <div className="col-md-4 mb-3">
+          <div className="card shadow p-3 text-center">
+            <h5>Affectation d'entreprises aux étudiants</h5>
+            <button className="btn btn-success mt-2" onClick={() => navigate("/admin/affectation")}>
+              Affecter une entreprise
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

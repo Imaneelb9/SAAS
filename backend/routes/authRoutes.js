@@ -13,4 +13,7 @@ router.post('/register', authController.register); // <-- gardez seulement cette
 router.post('/tuteur/login', authController.loginTuteur);
 router.post('/tuteur/register', authController.registerTuteur);
 
+// Admin
+router.post('/login-admin', authController.loginAdmin);
+
 module.exports = router;

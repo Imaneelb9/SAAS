@@ -116,3 +116,23 @@ exports.loginTuteur = async (req, res) => {
     res.status(500).json({ error: 'Erreur serveur', details: error });
   }
 };
+
+exports.loginAdmin = async (req, res) => {
+  const { idcode, motdepasse } = req.body;
+  try {
+    // On suppose que le champ idcode est stocké dans User (ajoutez-le si besoin)
+    const user = await User.findOne({ where: { idcode, role: 'admin' } });
+    if (!user) return res.status(401).json({ error: 'Admin introuvable' });
+
+    const isMatch = await bcrypt.compare(motdepasse, user.motdepasse);
+    if (!isMatch) return res.status(401).json({ error: 'Mot de passe incorrect' });
+
+    const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, {
+      expiresIn: '1d'
+    });
+
+    res.json({ token, user: { id: user.id, nom: user.nom, role: user.role } });
+  } catch (error) {
+    res.status(500).json({ error: 'Erreur serveur', details: error });
+  }
+};

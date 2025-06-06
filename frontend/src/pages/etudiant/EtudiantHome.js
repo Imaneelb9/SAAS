@@ -23,10 +23,15 @@ const EtudiantHome = () => (
       </div>
       <div className="col-md-10 mb-3">
         <div className="card shadow p-3 text-center">
-          <h5>Ajouter ou modifier mon CV et ma lettre de motivation</h5>
-          <Link to="/etudiant/cv-lettre" className="btn btn-info mt-2">
-            Gérer mon CV et ma lettre de motivation
-          </Link>
+          <h5>Gérer mes documents</h5>
+          <div className="d-flex justify-content-center gap-3 mt-2 flex-wrap">
+            <Link to="/etudiant/cv" className="btn btn-outline-success">
+              ✅ Gérer mon CV
+            </Link>
+            <Link to="/etudiant/lettre" className="btn btn-outline-primary">
+              ✅ Gérer ma lettre de motivation
+            </Link>
+          </div>
         </div>
       </div>
     </div>
