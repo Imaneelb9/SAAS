@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { User, Stage, Etudiant, Entreprise, Tuteur } = require('../models');
-const verifyToken = require('../middlewares/authMiddleware');
+const {verifyToken} = require('../middlewares/authMiddleware');
 
 // Vérification de la route
 router.get('/', (req, res) => {
@@ -138,6 +138,51 @@ router.put('/tuteurs/:id/toggle', verifyToken, async (req, res) => {
   } catch (err) {
     console.error("Erreur admin/tuteurs toggle :", err);
     res.status(500).json({ error: "Erreur lors de la mise à jour du tuteur", details: err.message });
+  }
+});
+
+// Ajouter un tuteur (accessible uniquement à l'admin)
+router.post('/tuteurs', verifyToken, async (req, res) => {
+  console.log("POST /api/admin/tuteurs appelée", req.body); // <-- Ajouté
+  try {
+    const { nom, prenom, email, fonction, entreprise } = req.body;
+    // Création de l'utilisateur lié au tuteur
+    const user = await User.create({ nom, prenom, email, actif: true });
+    // Création du tuteur
+    const tuteur = await Tuteur.create({ userId: user.id, nom, fonction, entreprise, actif: true });
+    res.status(201).json({ message: "Tuteur ajouté", tuteur });
+  } catch (err) {
+    console.error("Erreur lors de l'ajout du tuteur :", err); // <-- Ajouté pour loguer l'erreur complète
+    res.status(500).json({ error: "Erreur lors de l'ajout du tuteur", details: err.message });
+  }
+});
+
+// Route temporaire pour insérer un jeu de données de test
+router.post('/seed', async (req, res) => {
+  try {
+    // Création d'utilisateurs
+    const user1 = await User.create({ nom: 'Dupont', prenom: 'Jean', email: 'jean.dupont@test.com', actif: true });
+    const user2 = await User.create({ nom: 'Martin', prenom: 'Claire', email: 'claire.martin@test.com', actif: true });
+
+    // Création d'étudiants
+    const etudiant1 = await Etudiant.create({ userId: user1.id });
+    const etudiant2 = await Etudiant.create({ userId: user2.id });
+
+    // Création d'entreprises
+    const entreprise1 = await Entreprise.create({ nom: 'TechCorp' });
+    const entreprise2 = await Entreprise.create({ nom: 'InnovateX' });
+
+    // Création de stages
+    const stage1 = await Stage.create({ etudiantId: etudiant1.id, entrepriseId: entreprise1.id, status: 'en attente' });
+    const stage2 = await Stage.create({ etudiantId: etudiant2.id, entrepriseId: entreprise2.id, status: 'valide' });
+
+    // Création de tuteurs
+    const tuteurUser = await User.create({ nom: 'Tuteur', prenom: 'Pierre', email: 'pierre.tuteur@test.com', actif: true });
+    const tuteur1 = await Tuteur.create({ userId: tuteurUser.id, nom: 'Pierre', fonction: 'Encadrant', entreprise: 'TechCorp', actif: true });
+
+    res.json({ message: "Jeu de données inséré", users: [user1, user2], etudiants: [etudiant1, etudiant2], entreprises: [entreprise1, entreprise2], stages: [stage1, stage2], tuteurs: [tuteur1] });
+  } catch (err) {
+    res.status(500).json({ error: "Erreur lors de l'insertion du jeu de données", details: err.message });
   }
 });
 

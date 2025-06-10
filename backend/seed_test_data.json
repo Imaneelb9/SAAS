@@ -1,0 +1,67 @@
+[
+  {
+    "model": "User",
+    "data": [
+      { "id": 1, "email": "etudiant1@imh.com", "password": "hashedpassword1", "role": "etudiant", "actif": true },
+      { "id": 2, "email": "etudiant2@imh.com", "password": "hashedpassword2", "role": "etudiant", "actif": true },
+      { "id": 3, "email": "entreprise1@imh.com", "password": "hashedpassword3", "role": "entreprise", "actif": true },
+      { "id": 4, "email": "admin@imh.com", "password": "hashedpassword4", "role": "admin", "actif": true },
+      { "id": 5, "email": "tuteur1@imh.com", "password": "hashedpassword5", "role": "tuteur", "actif": true },
+      { "id": 5, "email": "tuteur2@imh.com", "password": "hashedpassword6", "role": "tuteur", "actif": true }
+
+      
+    ]
+  },
+  {
+    "model": "Etudiant",
+    "data": [
+      { "id": 1, "userId": 1, "nom": "Dupont", "prenom": "Alice", "filiere": "Informatique" },
+      { "id": 2, "userId": 2, "nom": "Martin", "prenom": "Bob", "filiere": "Mathématiques" }
+    ]
+  },
+  {
+    "model": "Entreprise",
+    "data": [
+      { "id": 1, "userId": 3, "nom": "DXC", "secteur": "IT" }
+    ]
+  },
+  {
+    "model": "Tuteur",
+    "data": [
+      { "id": 1, "userId": 5, "fonction": "Manager", "entreprise": "DXC", "actif": true },
+      { "id": 2, "userId": 4, "fonction": "Administrateur", "entreprise": "DXC", "actif": true }
+    ]
+  },
+  {
+    "model": "Stage",
+    "data": [
+      {
+        "id": 1,
+        "etudiantId": 1,
+        "entrepriseId": 1,
+        "titre": "Développeur Web",
+        "description": "Stage React/Node",
+        "status": "en attente",
+        "dateDebut": "2024-07-01",
+        "dateFin": "2024-09-01"
+      },
+      {
+        "id": 2,
+        "etudiantId": 2,
+        "entrepriseId": 1,
+        "titre": "Data Analyst",
+        "description": "Stage Data",
+        "status": "stagiaire",
+        "dateDebut": "2024-07-15",
+        "dateFin": "2024-09-15"
+      }
+    ]
+  },
+  {
+    "model": "Candidature",
+    "data": [
+      { "id": 1, "etudiantId": 1, "stageId": 1, "status": "en attente" },
+      { "id": 2, "etudiantId": 2, "stageId": 2, "status": "acceptée" }
+    ]
+  }
+]

@@ -1,6 +1,8 @@
 require('dotenv').config(); // Assurez-vous que dotenv est chargé en premier
 const app = require('./app');
 const db = require('./models'); // Importez tout le dossier models
+app.use('/api', require('./routes/authRoutes'));
+app.use('/api/admin', require('./routes/adminRoutes')); // <-- Ajouté
 
 const PORT = process.env.PORT || 5000;
 

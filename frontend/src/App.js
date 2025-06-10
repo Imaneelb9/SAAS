@@ -24,6 +24,7 @@ import AjouterOffre from "./pages/entreprise/AjouterOffre";
 import ListeStagiaires from "./pages/entreprise/ListeStagiaires";
 import ListeTuteurs from "./pages/admin/ListeTuteurs";
 import EspaceEtudiant from "./pages/etudiant/EspaceEtudiant";
+import AdminAddTuteur from './pages/AdminAddTuteur';
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
         <Route path="/entreprise/demandes" element={<EntrepriseHome />} />
         <Route path="/entreprise/ajouter" element={<AjouterOffre />} />
         <Route path="/entreprise/etudiants" element={<ListeStagiaires />} />
+        <Route path="/admin/tuteurs/add" element={<AdminAddTuteur />} />
       </Routes>
     </Router>
   );

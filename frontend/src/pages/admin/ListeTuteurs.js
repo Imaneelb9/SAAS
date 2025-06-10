@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from 'react-router-dom';
 
 const ListeTuteurs = () => {
   const [tuteurs, setTuteurs] = useState([]);
@@ -25,7 +26,12 @@ const ListeTuteurs = () => {
 
   return (
     <div className="container mt-5">
-      <h2>Gestion des comptes tuteurs</h2>
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h2>Liste des tuteurs</h2>
+        <Link to="/admin/tuteurs/add" className="btn btn-primary">
+          Ajouter un tuteur
+        </Link>
+      </div>
       {loading ? (
         <p>Chargement...</p>
       ) : (

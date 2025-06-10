@@ -14,7 +14,7 @@ const Home = () => {
       }}
     >
       <h1 className="text-center mb-5 home-title display-3 fw-bold" style={{ letterSpacing: "2px" }}>
-        Bienvenue sur le Gestionnaire de Stages
+        Bienvenue sur le Gestionnaire de Stages"IMH-Tech"
       </h1>
       <div className="row justify-content-center">
 
@@ -55,20 +55,6 @@ const Home = () => {
                 <strong>Supervisez le processus global</strong> : gérez les comptes utilisateurs, visualisez les statistiques des stages et affectez les entreprises aux étudiants.
               </p>
               <Link to="/login-admin" className="btn btn-dark m-1 home-btn">Se connecter</Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Tuteur */}
-        <div className="col-md-3 mb-4">
-          <div className="card text-center shadow home-card home-card-tuteur">
-            <div className="card-body">
-              <h4 className="card-title home-card-title">🧑‍🏫 Espace Tuteur</h4>
-              <p className="card-text home-card-text">
-                <strong>Accédez à votre espace tuteur</strong> pour suivre les étudiants encadrés, valider les rapports et échanger avec l'administration.
-              </p>
-              <Link to="/tuteur/register" className="btn btn-primary m-1 home-btn">S'inscrire</Link>
-              <Link to="/tuteur/login" className="btn btn-outline-primary m-1 home-btn">Se connecter</Link>
             </div>
           </div>
         </div>

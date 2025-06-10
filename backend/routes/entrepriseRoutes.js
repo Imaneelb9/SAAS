@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Stage, Entreprise } = require('../models');
-// Vérifiez que le chemin d'import est correct :
-const verifyToken = require('../middlewares/authMiddleware');
+const { verifyToken } = require('../middlewares/authMiddleware'); // Utilisez { verifyToken } si exporté ainsi
 
 // Liste des demandes reçues par l'entreprise connectée
 router.get('/demandes', verifyToken, async (req, res) => {

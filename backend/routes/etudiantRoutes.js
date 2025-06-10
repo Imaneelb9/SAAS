@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Etudiant } = require('../models');
-const verifyToken = require('../middlewares/authMiddleware'); // <-- le dossier doit s'appeler "middlewares" (pluriel)
+const {verifyToken} = require('../middlewares/authMiddleware'); // Pas de destructuring ici
 const multer = require('multer');
 const path = require('path');
 

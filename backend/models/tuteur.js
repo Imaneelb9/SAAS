@@ -12,11 +12,11 @@ const Tuteur = sequelize.define('Tuteur', {
     allowNull: false,
     unique: true
   },
-  fonction: {
-    type: DataTypes.STRING,
+  entrepriseId: {  // <--- lien avec la table Entreprise
+    type: DataTypes.INTEGER,
     allowNull: true
   },
-  entreprise: {
+  fonction: {
     type: DataTypes.STRING,
     allowNull: true
   },
@@ -24,7 +24,6 @@ const Tuteur = sequelize.define('Tuteur', {
     type: DataTypes.BOOLEAN,
     defaultValue: true
   }
-  // Ajoutez d'autres champs si besoin
 }, {
   tableName: 'Tuteurs'
 });
